@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="Scripts/training.js" type="text/javascript"></script>
+    
+    <title></title>
+	<link href="css/themes/default/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css" />
+    <link href="css2/MyStylesSheet.css" rel="stylesheet" type="text/css" />
+    
+    <style type="text/css">
+        
+       
+       img.deletearea
+  {
+      background-image:url(images/empty.gif);
+           background-repeat:no-repeat;
+           width: .5px; /* Width of new image */
+           height: .5px;
+           border:0px;
+  }
+  
+   img.deletearea.swipe
+  {
+      background-image:url(images/deletebutton.gif);
+           background-repeat:no-repeat;
+           width: 60px; /* Width of new image */
+           height: 30px;
+           border:0px;
+  }
+  
+  img.deletearea.unswipe
+  {
+      background-image:url(images/empty.gif);
+           background-repeat:no-repeat;
+           width: .5px; /* Width of new image */
+           height: .5px;
+           border:0px;
+  }
+        </style>
+	<script src="phonegap.js" type="text/javascript"></script>
+   	<script src="Scripts/jquery-1.8.2.js"></script>
+	<script src="Scripts/jquery.mobile-1.3.2.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="Scripts/stopwatch.js"></script>
+	<script type="text/javascript" src="Scripts/jquery.cycle.all.js"></script>
+  
+    
+    
+
+     
+</head>
+<body onload="init();">
+
+    <div data-role="page" id="home">
+        <div data-role="header"  >    
+			<h1>Personal Training</h1>			
+        </div>
+
+ 	<a href="#yourInfo" data-role="button" data-theme="b">Your Information</a>
+	<a href="#exercises" data-role="button" data-theme="e">Set up Exercises</a>
+    <a href="#workouts" data-role="button" data-theme="b">Set up Workouts</a>
+    <a href="#BodyFatEntry" data-role="button" data-theme="e">Calculate Body Fat %</a>
+	<a href="#ErgTest" data-role="button" data-theme="b">Max V02 tests</a>
+	
+		
+  </div>
+  <div data-role = "page" id="workouts">
+  <div data-role="header" data-position="fixed" >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></a><center>Workouts</center></td>
+      </tr>  </table>
+
+ </div>
+
+    <div data-role = "content">
+    
+    </div>
+
+
+
+
+  </div>
+
+
+    <div data-role = "page" id="exercises">
+    
+    <div data-role="header" data-position="fixed" >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></a></td><td align="center">Personal Exercises</td>
+      <td align="right"> <a href="#addexercise" data-role="button" data-icon="plus" data-iconpos="notext" data-theme="b" data-iconshadow="false" data-iconpos="right" data-inline="true">Add Exercise</a> </td></tr>
+      </table>
+
+           			
+        
+    </div>
+     <script type="text/javascript">
+     <!--
+
+         Exercise.webdb.open();
+         Exercise.webdb.createTable();
+         Exercise.webdb.getAllTodoItems(loadTodoItems);
+
+     //-->
+     </script>
+   
+    
+     <ul  data-role="listview" data-inset="true" id="todoItems">
+    </ul>
+    
+
+ 
+  <script type="text/javascript">
+      $(function () {
+          // any parent tag that exists when the .on method call occurs will work. For instance a ul tag for a list which will have dynamic elements added would look like this:
+          $("ul").on("swipeleft", "li", swipeHandler);
+          $("ul").on("swiperight", "li", swipeHandler);
+
+          // Callback function references the event target and adds the 'swipe' class to it
+          function swipeHandler(event) {
+              var myelement = "#image" + event.target.id.substring(4, (event.target.id.length - 1));
+              var hndElement = "#hdn" + event.target.id.substring(4, (event.target.id.length - 1));
+
+              if ($(hndElement).val() == 0) $(hndElement).val(1); else $(hndElement).val(0);
+
+              if ($(hndElement).val() == 1) {
+                  $(myelement).addClass("swipe").removeClass("unswipe");
+              } else {
+                  $(myelement).addClass("unswipe").removeClass("swipe");
+
+              }
+
+
+          }
+      });
+</script>  
+    <div data-role="footer" data-position="fixed">
+
+	   </div>
+    </div>
+
+
+    <div data-role = "page" id="addexercise" data-position="fixed">
+     <div data-role="header"  >
+     <a href="#home" data-role="button" data-icon="home" data-iconpos="notext" 
+     data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></a><h1>Add an Exercise</h1>
+	 </div>
+
+    <table border="0">
+    
+    <tr><td>Name</td><td><input id="txtName" type="text" /></td></tr>
+    <tr><td>Machine #</td><td><input id="txtMachineNum" type="text" /></td></tr>
+    <tr><td>Type of Exercise</td>
+      <td><select id="cboType">
+            <option>Machine</option>
+            <option>Body Weight Resistance</option>
+            <option>Free Weights</option>
+            <option>Bosu Ball</option>
+            <option>Aerobic Ball</option>
+            <option>Rubber Bands</option>
+        </select>
+      </td></tr>
+      <tr><td>Method of Evaluation</td>
+      <td><select id="cboMethod">
+            <option>reps</option>
+            <option>duration</option>
+            <option>distance</option>
+            
+        </select>
+      </td></tr>
+      <tr><td colspan="2"><input id="btnAdd" type="button" value="Add" onclick="createExercise();" /></td></tr>
+        
+    
+    
+    </table>
+    
+   		  
+	  
+    </div>
+
+    <div data-role = "page" id="editexercise">
+    <script type="text/javascript">
+        $("#editexercise").on("pageshow", onPageShowEdit);
+
+        function onPageShowEdit(e, data) {
+            var exIDi = getParameterByName('exID');
+            Exercise.webdb.getExerciseInfo(populateExerciseForm, exIDi);
+        }
+        
+    </script>
+     <div data-role="header"  >
+
+
+      <table border="0" width="100%"><tr><td align="center">Edit an Exercise</td></tr></table>
+	 </div>
+
+    <table border="0">
+    
+    <tr><td>Name</td><td><input type="hidden" id="hdnEditID" /><input id="txtEditName" type="text" /></td></tr>
+    <tr><td>Machine #</td><td><input id="txtEditMachineNum" type="text" /></td></tr>
+    <tr><td>Type of Exercise</td>
+      <td><select id="selEditExType">
+            <option></option>
+            <option>Machine</option>
+            <option>Body Weight Resistance</option>
+            <option>Free Weights</option>
+            <option>Bosu Ball</option>
+            <option>Aerobic Ball</option>
+            <option>Rubber Bands</option>
+        </select>
+      </td></tr>
+      <tr><td>Method of Evaluation</td>
+      <td><select id="selEditMethOfEval">
+            <option></option>
+            <option>reps</option>
+            <option>duration</option>
+            <option>distance</option>
+            
+        </select>
+      </td></tr>
+      <tr><td colspan="2"><input id="btnSaveEdit" type="button" value="Save" onclick="editExercise();" /></td></tr>
+        
+    
+    
+    </table>
+    
+		<div data-role="footer" data-position="fixed">
+		 
+	   </div>
+    </div>
+
+    <div data-role = "page" id="exerciseDisplay">
+    
+    <script type="text/javascript">
+        $("#exerciseDisplay").on("pageshow", onPageShow);
+
+        function onPageShow(e, data) {
+            var exIDi = getParameterByName('exID');
+            Exercise.webdb.getExerciseInfo(showExerciseInfo, exIDi);
+        }
+        
+    </script>
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td align="center">Exericise Info.</td>
+      <td align="right"> <a href="#" onclick="$.mobile.changePage('#editexercise');" data-role="button" data-icon="edit" data-iconpos="notext" data-theme="c" data-inline="true">Edit</a></td></tr>
+      </table>
+	</div>
+
+    <div id="exerciseInfo">
+    </div>
+     
+    </div>
+
+
+    <div data-role = "page" id="BodyFatEntry">
+    
+    
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></a></td><td align="center">Body Fat Calculation</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+    <div data-role="content">
+        <table border ="0">
+        <tr><td colspan="2" align="center">Body Fat Calculation</td></tr>
+        <tr><td>Abdominal Measurement</td><td><input type="text" id="abMeasure" /></td></tr>
+        <tr><td>Tricept Measurement</td><td><input type="text" id="triMeasure" /></td></tr>
+        <tr><td>Thigh Measurement</td><td><input type="text" id="thiMeasure" /></td></tr>
+        <tr><td>Suprailiac Measurement</td><td><input type="text" id="iliMeasure" /></td></tr>
+       <tr><td colspan="2" align="center"><input type="button" id="btnCalculate" value="Calculate" onclick="calculateBF();" /></td></tr>
+       <tr><td colspan="2" align="center"><div id="divResult"/></td></tr>
+        
+        </table>
+    </div>
+     <div data-role="footer" data-position="fixed">
+		  
+		  <a href="#3PointBodyFatEntry" >3 pt.</a>
+		   <a href="#BodyFatEntry" >4 pt.</a>
+		    <a href="#FatComparasin" >Compare</a>
+		  
+	   </div>
+    </div>
+
+	
+    <div data-role = "page" id="3PointBodyFatEntry">
+    
+    
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></a></td><td align="center">Body Fat Calculation</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+    <div data-role="content">
+        <table border ="0">
+        <tr><td colspan="2" align="center">Body Fat Calculation</td></tr>
+        <tr><td>Chest Measurement</td><td><input type="text" id="cheMeasure3pt" /></td></tr>
+        <tr><td>Abdominal Measurement</td><td><input type="text" id="abMeasure3pt" /></td></tr>
+        <tr><td>Thigh Measurement</td><td><input type="text" id="thiMeasure3pt" /></td></tr>
+        
+       <tr><td colspan="2" align="center"><input type="button" id="btnCalculate3pt" value="Calculate" onclick="calculateBF3pt();" /></td></tr>
+       <tr><td colspan="2" align="center"><div id="divResult3pt"/></td></tr>
+        
+        </table>
+    </div>
+     <div data-role="footer" data-position="fixed">
+		   <a href="#3PointBodyFatEntry" >3 pt.</a>
+		   <a href="#BodyFatEntry" >4 pt.</a>
+		    <a href="#FatComparasin" >Compare</a>
+	   </div>
+    </div>
+
+	 <div data-role = "page" id="yourInfo">
+    
+
+     <script type="text/javascript">
+         $("#yourInfo").on("pageshow", yourInfoPageShow);
+
+         function yourInfoPageShow(e, data) {
+             var thisPerson = window.localStorage.getItem("StorageValue");
+             thisPerson = JSON.parse(thisPerson);
+
+             $("#userName").val(thisPerson.userName);
+             $("#birthDate").val(thisPerson.userBirthdate);
+             $("#weightSlider").val(thisPerson.userWeight).slider("refresh");
+             $("input[name=rdoGender][value=" + thisPerson.userGender + "]").attr('checked', true).checkboxradio("refresh");
+             
+         }
+        
+    </script>
+    
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" 
+     data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></td><td align="center">Your Information</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+	
+
+    <div data-role="content">
+        <table border ="0" width="90%">
+        <tr>
+        <td>
+        Name
+        
+        </td>
+        <td>
+            <input type="text" id="userName" />
+        
+        </td>
+        
+        
+        </tr>
+        <tr><td>Gender</td>
+		<td>
+
+			<fieldset data-role="controlgroup" data-type="horizontal">
+	   
+				<input type="radio" name="rdoGender" id="rdoGender_M" value="M"  />
+				 <label for="rdoGender_M">M</label>
+		 
+				<input type="radio" name="rdoGender" id="rdoGender_F" value="F"  />
+				<label for="rdoGender_F">F</label>
+    
+			</fieldset>
+
+
+
+
+		</td></tr>
+        <tr><td>Birth Date</td><td>
+			<input type="date" id="birthDate" min="1950-01-01" max="2010-01-01" />
+		</td></tr>
+         <tr>
+         <td colspan="2" >
+         <label for="weightSlider">Your Weight:</label>
+		<input type="range" name="weightSlider" id="weightSlider" value="200" min="180" max="230" data-highlight="true"  />
+         
+         </td>
+         
+         </tr> 
+         <tr>
+         <td colspan="2" align="center">
+         <input type="button" value="Update/Save" onclick="updateSaveUserInfo();"  />
+         
+         
+         </td>
+         
+         </tr>   
+      
+        
+        </table>
+		
+    </div>
+     
+    </div>
+
+
+
+
+
+
+
+	 <div data-role = "page" id="ErgTest">
+    
+     <script type="text/javascript">
+        $("#ErgTest").on("pageshow", onErgPageShow);
+
+        function onErgPageShow(e, data) {
+             populateNumPicker("#ergMin",6,10);
+			 populateNumPicker("#ergSec",0,59);
+
+
+			
+
+        }
+        
+		function populateNumPicker(control,minNum,maxNum)
+		{
+			for (var i = minNum; i <= maxNum; i++) {
+				var j = "0" + i;
+				j=j.substring(j.length -2);
+				$(control).append("<option value='" + i + "'>" +  j + "</option>");
+			}
+
+		}
+    </script>
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" 
+     data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></td><td align="center">Max Vo2 Test</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+	
+
+    <div data-role="content">
+        <table border ="0">
+        <tr><td colspan="2">Enter Time for 2000m Erg Test Concept II Rower</td></tr>
+        <tr><td>Time</td>
+		<td width = "500">
+			
+			<table border = "0" ><tr><td width="100"> <select id="ergMin" /></td><td><font size="+3">:</font></td><td width = "100"><select id="ergSec" /></td></tr></table>
+            
+            
+		</td></tr>
+        <tr><td colspan="2" align="center"><input type = "button" value="Calculate Max VO2" onclick="calculateMaxVo2()" /></td></tr>
+       
+             
+      
+        
+        </table>
+        <table border="0" width="100%"><tr><td colspan="5"><label for="weightSlider">VO2 Result:</label><br />
+		<input type="range" name="VO2Slider" id="VO2Slider" value="0" min="15" max="45" data-highlight="true"   /></td></tr>
+        <tr><td>Poor</td><td>Fair</td><td>Avg.</td><td>Good</td><td>Exc.</td></tr>
+        </table>
+        
+         
+		
+    </div>
+     <div data-role="footer" data-position="fixed">
+		
+	  <a href="#ErgTestTreadMill" >Treadmill</a>
+	 </div>
+    </div>
+
+
+	 <div data-role = "page" id="ErgTestTreadMill">
+
+	   <script type="text/javascript">
+        $("#ErgTestTreadMill").on("pageshow", onErgTreadmillPageShow);
+    
+	function onErgTreadmillPageShow(){
+    $("#btnStartTimer").button('enable');
+	$("#btnResetTimer").button('disable');
+	$("#btnStopTimer").button('disable');
+	$('#btnStopTimer').buttonMarkup({ theme: "c"  });
+	$('#btnResetTimer').buttonMarkup({ theme: "c"  });
+	$('#btnStartTimer').buttonMarkup({ theme: "b",icon: "star"  });
+	$('#btnStopTimer').button('refresh');
+	$('#btnResetTimer').button('refresh');
+	
+	
+	}
+	</script>
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" 
+     data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></td><td align="center">Max Vo2 Treadmill Test</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+	
+
+    <div data-role="content">
+    <div>Time: <span id="time"></span></div>
+	<input type="button" id="btnStartTimer"value="start" onclick="start();">
+	<input type="button" id = "btnStopTimer" value="stop" onclick="stop();">
+	<input type="button" id = "btnResetTimer" value="reset" onclick="reset()">
+        <table border="0" width="100%"><tr><td colspan="5"><label for="weightSlider">VO2 Result:</label><br />
+		<input type="range" name="VO2TreadmillSlider" id="VO2TreadmillSlider" value="0" min="15" max="45" data-highlight="true"   /></td></tr>
+        <tr><td>Poor</td><td>Fair</td><td>Avg.</td><td>Good</td><td>Exc.</td></tr>
+        </table>
+        
+         
+		
+    </div>
+     <div data-role="footer" data-position="fixed">
+		 
+	 <a href="#ErgTest" >Row</a>
+		   
+	 </div>
+    </div>
+       
+	   	 <div data-role = "page" id="FatComparasin">
+
+	   
+
+    <div data-role="header"  >
+      <table border="0" width="100%"><tr><td><a href="#home" data-role="button" data-icon="home" data-iconpos="notext" 
+     data-theme="b" data-iconshadow="false" data-iconpos="left" data-inline="true"></td><td align="center">Body Fat Comparasin</td>
+      <td align="right"> &nbsp;</td></tr>
+      </table>
+	</div>
+
+	
+
+   <div data-role="content"    >
+    
+	<table border = "0" id="swipeTable" width="100%"><tr><td align="right"><a id="Prev" href="#" class="swipeable">Prev</a></td><td width="100">
+		<div id="slideshow" >
+		<img src='images/12%.jpg' class="swipeableimage">
+		<img src='images/15%.jpg' class="swipeableimage">
+		<img src='images/20%.jpg' class="swipeableimage">
+		<img src='images/25%.jpg' class="swipeableimage">
+		<img src='images/30%.jpg' class="swipeableimage">
+		<img src='images/35%.jpg' class="swipeableimage">
+		</div>
+		</td><td align="left"><a id="Next" href="#" class="swipeable">Next</a></td></tr></table>
+
+		
+		
+		<script type="text/javascript">
+		<!--
+		$('#slideshow').cycle({
+		fx:      'scrollHorz',
+		speed:  300, 
+		next:   '#Next',
+		prev:  '#Prev',
+		timeout: 0,
+		nowrap:true});	
+		
+		$("img.swipeableimage").mousedown(function(event){
+			return false;
+		});
+
+		$("#swipetable").mousedown(function(event){
+			return false;
+		});
+
+		$("a.swipeable").mousedown(function(event){
+			return false;
+		});
+		
+		jQuery( "img.swipableimage" ).on( "swipeleft", 
+		function( event ) 
+		{ 
+			event.preventDefault(); 
+			$( "#Next" ).trigger( "click" );
+		} );
+		jQuery( "img.swipableimage" ).on( "swiperight", function( event ) 
+		{ 
+			event.preventDefault(); 
+			$( "#Prev" ).trigger( "click" );
+		} );
+
+		jQuery( "#swipeTable" ).on( "swipeleft", 
+		function( event ) 
+		{ 
+			event.preventDefault(); 
+			$( "#Next" ).trigger( "click" ); 
+		} );
+		jQuery(  "#swipeTable" ).on( "swiperight", function( event ) 
+		{ 
+			event.preventDefault(); 
+			$( "#Prev" ).trigger( "click" );
+		} );
+		
+		 
+      		
+		//-->
+	</script>
+		
+	</div>
+	
+	
+      <div data-role="footer" data-position="fixed">
+		   <a href="#3PointBodyFatEntry" >3 pt.</a>
+		   <a href="#BodyFatEntry" >4 pt.</a>
+		    <a href="#FatComparasin" >Compare</a>
+	   </div>
+    </div>
+       
+
+	   
+</body>
+</html>
