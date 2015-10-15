@@ -6,10 +6,10 @@
         id        = "com.phonegap.hello-world"
         version   = "1.0.0">
 
-    <name>Hello World</name>
+    <name>Exercise and Fitness Tracker</name>
 
     <description>
-        Hello World sample application that responds to the deviceready event.
+        uses storage and object oriented javascript
     </description>
 
     <author href="http://phonegap.com" email="support@phonegap.com">
@@ -31,7 +31,7 @@
    
 
     <!-- Customize your app and platform with the preference element. -->
-    <preference name="phonegap-version"           value="2.9.0" />          <!-- all: current version of PhoneGap -->
+    <preference name="phonegap-version"           value="5.2.0" />          <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
